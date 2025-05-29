@@ -1,0 +1,250 @@
+Index.html (file content)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tipulator</title>
+</head>
+<body>
+    <div id="tipulator-wrapper">
+    <style>
+        h1 {
+        color: black;
+    }
+        h1:hover {
+        color: darkorange;
+    }
+    </style>
+    <h1>Tipulator</h1>
+        <p>Calculate how much to pay for your meal</p>
+        <form onsubmit="changeSubmitButton(event)">
+            <div>
+                Initial total cost before tip:<br>
+                <input type="number" min="1" name="billTotal" required>
+            </div>
+            <div>
+                Rate service: poor, good, excellent<br>
+                <input type="text" name="serviceRating" required placeholder="Enter 'poor', 'good', or 'excellent'">
+            <div id="serviceRatingFeedback" style="color: red;">
+                <div id="serviceRatingFeedback"></div>
+            </div>
+            <div>
+                Number of people splitting the bill:<br>
+                <input type="number" min="1" name="numPaying" required>
+            </div>
+            <button type="submit" id="submitButton">Submit</button>
+        
+        <hr>
+        <div id="results">
+            <label for="billAmount">Bill Amount (£):</label>
+                <input type="number" id="billAmount" placeholder="Enter bill amount" step="0.01">
+
+            <label for="serviceRating">Service Rating:</label>
+                <select id="serviceRating">
+                    <option value="">Select</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="poor">Poor</option>
+    </select>
+
+    <label for="numberOfPeople">Number of People:</label>
+    <input type="number" id="numberOfPeople" value="1" min="1">
+
+    <button onclick="calculateTip()">Calculate</button>
+
+    <div id="feedback"></div>
+    <div>
+        <p>Total with Tip: £<span id="totalWithTip">0.00</span></p>
+        <p>Per Person: £<span id="perPerson">0.00</span></p>
+    </div>
+        </div>
+    </div>
+    <div id="controls">
+        <button id="rightButton">Move right</button>
+        <button id="leftButton">Move left</button>
+        <button id="closeButton">Close</button>
+    </div>
+        <script src="script.js"></script>
+    </form)>
+</body>
+
+</html>
+Style.css (file content)
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+
+body {
+    background-image: url("https://codeinstitute.s3.amazonaws.com/l3assets/js/cafe.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    text-align: center;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+h1, h2 {
+    color: darkslategrey;
+}
+
+#heading {
+    transition: 1s;
+}
+
+#tipulator-wrapper {
+    max-width: 400px;
+    margin: 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 8px 20px;
+    border-radius: 25px;
+    transition: 2s;
+}
+
+#tipulator-wrapper > p {
+    margin-bottom: 32px;
+}
+
+form > div {
+    margin: 1rem 0;
+}
+
+input {
+    height: 30px;
+    border-radius: 8px;
+    margin: 8px;
+    border: 1px solid grey;
+    font-size: 20px;
+    padding: 3px 10px;
+}
+
+#submitButton {
+    font-size: 20px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    border: 2px solid darkgreen;
+    cursor: pointer;
+    font-family: "Quicksand", sans-serif;
+}
+
+#results > p {
+    font-weight: bold;
+}
+
+#closeButton,
+#rightButton,
+#leftButton {
+    font-size: 20px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: darkorange;
+    color: white;
+    font-weight: bold;
+    border: 2px solid darkorange;
+    cursor: pointer;
+    font-family: "Quicksand", sans-serif;
+}
+
+#controls {
+    text-align: left;
+    margin-left: 15px;
+}
+
+
+
+Script.js (file content)
+function changeSubmitButton(event) {
+event.preventDefault();
+    let submitButton = document.getElementById("submitButton");
+}
+
+function changeSubmitButton(event) {
+    event.preventDefault();
+    let submitButton = document.getElementById("submitButton");
+   
+}
+
+function validateRating() {
+    const ratingInput = document.getElementById("serviceRating").value.toLowerCase();
+    const feedbackElement = document.getElementById("serviceRatingFeedback");
+    feedbackElement.textContent = ""; // Clear previous feedback
+
+    // Check if ratingInput is valid
+    if (ratingInput !== "poor" && ratingInput !== "good" && ratingInput !== "excellent") {
+        // Provide feedback if input is invalid
+        feedbackElement.textContent = "Please enter a valid rating: 'poor', 'good', or 'excellent'.";
+    }
+}
+
+ function calculateTip() {
+            const billAmount = parseFloat(document.getElementById("billAmount").value);
+            const serviceRating = document.getElementById("serviceRating").value;
+            const numberOfPeople = parseInt(document.getElementById("numberOfPeople").value);
+            const feedbackElement = document.getElementById("feedback");
+            const totalWithTipElement = document.getElementById("totalWithTip");
+            const perPersonElement = document.getElementById("perPerson");
+
+            // Clear previous feedback
+            feedbackElement.textContent = "";
+
+            // Validate the inputs
+            if (isNaN(billAmount) || billAmount <= 0) {
+                feedbackElement.textContent = "Please enter a valid bill amount.";
+                return;
+            }
+            if (serviceRating === "") {
+                feedbackElement.textContent = "Please select a service rating.";
+                return;
+            }
+
+            let tipPercentage = 0;
+
+            // Determine the tip percentage based on service rating
+            switch (serviceRating) {
+                case "excellent":
+                    tipPercentage = 0.20;
+                    break;
+                case "good":
+                    tipPercentage = 0.10;
+                    break;
+                case "poor":
+                    tipPercentage = 0.00;
+                    break;
+            }
+
+            // Calculate total amount and per person amount
+            const tipAmount = billAmount * tipPercentage;
+            const totalAmount = billAmount + tipAmount;
+            const amountPerPerson = totalAmount / numberOfPeople;
+
+            // Display results rounded to two decimal points
+            totalWithTipElement.textContent = totalAmount.toFixed(2);
+            perPersonElement.textContent = amountPerPerson.toFixed(2);
+        }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById("moveRightBtn").addEventListener("click", function() {
+        const tipulator = document.getElementById("tipulator");
+        tipulator.style.transform = "translateX(500px)"; // Move right
+    });
+
+    // Move the Tipulator box back to original position
+    document.getElementById("moveLeftBtn").addEventListener("click", function() {
+        const tipulator = document.getElementById("tipulator");
+        tipulator.style.transform = "translateX(0)"; // Move left
+    });
+
+    // Close the Tipulator box
+    document.getElementById("closeBtn").addEventListener("click", function() {
+        document.body.innerHTML = "<h1>Thank you for using the Tipulator</h1>";
+    });
+});
